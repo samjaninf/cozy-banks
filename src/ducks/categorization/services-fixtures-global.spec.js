@@ -1,8 +1,11 @@
-import { globalModel, BankClassifier } from './services'
-import { tokenizer } from '.'
-import { Transaction } from '../../models'
-const path = require('path')
-// const fs = require('fs')
+import { globalModel } from 'cozy-konnector-libs/dist/libs/categorization/globalModel'
+import { tokenizer } from 'cozy-konnector-libs/dist/libs/categorization/helpers'
+import { cozyClient } from 'cozy-konnector-libs'
+import path from 'path'
+import fs from 'fs'
+
+window.console.log = jest.fn()
+window.console.warn = jest.fn()
 
 const cat2name = require('../categories/tree.json')
 const allowedFallbackCategories = require('./allowed_wrong_categories.json')
@@ -278,14 +281,10 @@ const computeAccuracy = transactions => {
 
 xOrDescribe('Chain of predictions', () => {
   // prepare mock
-  let manualCategorizations = []
   beforeEach(() => {
-    jest
-      .spyOn(Transaction, 'queryAll')
-      .mockImplementation(() => Promise.resolve(manualCategorizations))
     // Mock global model
     jest
-      .spyOn(BankClassifier, 'fetchParameters')
+      .spyOn(cozyClient, 'fetchJSON')
       .mockImplementation(() => Promise.resolve(globalModelJSON))
   })
 
@@ -319,9 +318,6 @@ xOrDescribe('Chain of predictions', () => {
     ;(transactions ? it : xit)(
       `should correctly predict transactions of ${bank}`,
       async () => {
-        manualCategorizations = transactions.filter(
-          op => op.manualCategoryId !== undefined
-        )
         // launch global model
         await globalModel({ tokenizer }, transactions)
         // parse results to check result
