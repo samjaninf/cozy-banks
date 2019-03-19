@@ -376,6 +376,8 @@ xOrDescribe('Chain of predictions', () => {
     jest
       .spyOn(cozyClient, 'fetchJSON')
       .mockImplementation(() => Promise.resolve(globalModelJSON))
+
+    jest.spyOn(BankTransaction, 'registerClient').mockImplementation(() => {})
   })
 
   afterAll(() => {
