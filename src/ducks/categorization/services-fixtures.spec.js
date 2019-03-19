@@ -8,6 +8,9 @@ import fs from 'fs'
 import cat2name from '../categories/tree.json'
 import allowedFallbackCategories from './allowed_wrong_categories.json'
 
+window.console.log = jest.fn()
+window.console.warn = jest.fn()
+
 const fixturePath = path.join(__dirname, 'fixtures')
 
 const BACKUP_DIR = process.env.BACKUP_DIR
@@ -370,9 +373,11 @@ xOrDescribe('Chain of predictions', () => {
     jest
       .spyOn(cozyClient, 'fetchJSON')
       .mockImplementation(() => Promise.resolve(globalModelJSON))
+
+    jest.spyOn(BankTransaction, 'registerClient').mockImplementation(() => {})
   })
 
-  afterEach(() => {
+  afterAll(() => {
     jest.restoreAllMocks()
   })
 
