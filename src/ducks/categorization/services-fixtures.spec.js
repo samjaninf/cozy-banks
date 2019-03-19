@@ -11,6 +11,8 @@ import allowedFallbackCategories from './allowed_wrong_categories.json'
 jest.mock(
   'cozy-konnector-libs/dist/libs/categorization/fetchTransactionsWithManualCat'
 )
+window.console.log = jest.fn()
+window.console.warn = jest.fn()
 
 const fixturePath = path.join(__dirname, 'fixtures')
 
@@ -374,9 +376,11 @@ xOrDescribe('Chain of predictions', () => {
     jest
       .spyOn(cozyClient, 'fetchJSON')
       .mockImplementation(() => Promise.resolve(globalModelJSON))
+
+    jest.spyOn(BankTransaction, 'registerClient').mockImplementation(() => {})
   })
 
-  afterEach(() => {
+  afterAll(() => {
     jest.restoreAllMocks()
   })
 
