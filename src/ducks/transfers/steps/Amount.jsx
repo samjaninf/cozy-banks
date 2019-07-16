@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import Padded from 'components/Spacing/Padded'
 import { translate, Field, Button } from 'cozy-ui/transpiled/react'
 import PageTitle from 'components/Title/PageTitle'
-import { PageContent, PageLayout, PageFooter } from 'ducks/Page'
+import { PageContent, PageLayout, PageFooter } from 'ducks/page'
 
 import Title from 'ducks/transfers/steps/Title'
 
