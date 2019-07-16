@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Padded from 'components/Spacing/Padded'
-import { translate, Field } from 'cozy-ui/transpiled/react'
+import { translate, Field, Button } from 'cozy-ui/transpiled/react'
 import PageTitle from 'components/Title/PageTitle'
-import BottomButton from 'components/BottomButton'
+import { PageContent, PageLayout, PageFooter } from 'ducks/Page'
 
 import Title from 'ducks/transfers/steps/Title'
 
@@ -55,33 +55,43 @@ class _ChooseAmount extends React.PureComponent {
     const { t, amount, onChange, onSelect, active } = this.props
     const validation = this.state.validation
     return (
-      <Padded>
-        {active && <PageTitle>{t('Transfer.amount.page-title')}</PageTitle>}
-        <Title>{t('Transfer.amount.title')}</Title>
-        <Field
-          className="u-mt-0"
-          value={amount}
-          onChange={ev => {
-            onChange(ev.target.value)
-          }}
-          type="number"
-          onBlur={this.handleBlur}
-          label={t('Transfer.amount.field-label')}
-          error={validation.error}
-          placeholder="10"
-        />
-        {validation.error ? (
-          <p className="u-error">
-            {t(`Transfer.amount.errors.${validation.error}`, validation)}
-          </p>
-        ) : null}
-        <BottomButton
-          disabled={amount === '' || !!validation.error}
-          label={t('Transfer.amount.confirm')}
-          visible={active}
-          onClick={onSelect}
-        />
-      </Padded>
+      <PageLayout removeHeight={14}>
+        <PageContent>
+          <Padded>
+            {active && <PageTitle>{t('Transfer.amount.page-title')}</PageTitle>}
+            <Title>{t('Transfer.amount.title')}</Title>
+            <Field
+              className="u-mt-0"
+              value={amount}
+              onChange={ev => {
+                onChange(ev.target.value)
+              }}
+              type="number"
+              onBlur={this.handleBlur}
+              label={t('Transfer.amount.field-label')}
+              error={validation.error}
+              placeholder="10"
+            />
+            {validation.error ? (
+              <p className="u-error">
+                {t(`Transfer.amount.errors.${validation.error}`, validation)}
+              </p>
+            ) : null}
+          </Padded>
+        </PageContent>
+        <PageFooter>
+          <Padded>
+            <Button
+              extension="full"
+              theme="primary"
+              disabled={amount === '' || !!validation.error}
+              label={t('Transfer.amount.confirm')}
+              visible={active}
+              onClick={onSelect}
+            />
+          </Padded>
+        </PageFooter>
+      </PageLayout>
     )
   }
 }
